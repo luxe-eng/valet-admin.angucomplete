@@ -1,3 +1,7 @@
+
+    /* jshint ignore:start */
+
+  //TODO: put this fork into own repo
 /*
  * angucomplete-alt
  * Autocomplete directive for AngularJS
@@ -46,7 +50,7 @@
     // Set the default template for this directive
     $templateCache.put(TEMPLATE_URL,
         '<div class="angucomplete-holder" ng-class="{\'angucomplete-dropdown-visible\': showDropdown}">' +
-        '  <input id="{{id}}_value" name="{{inputName}}" tabindex="{{fieldTabindex}}" ng-class="{\'angucomplete-input-not-empty\': notEmpty}" ng-model="searchStr" ng-disabled="disableInput" type="{{inputType}}" placeholder="{{placeholder}}" maxlength="{{maxlength}}" ng-focus="onFocusHandler()" class="{{inputClass}}" ng-focus="resetHideResults()" ng-blur="hideResults($event)" autocapitalize="off" autocorrect="off" autocomplete="off" ng-change="inputChangeHandler(searchStr)"/>' +
+        '  <input ng-trim="false" id="{{id}}_value" name="{{inputName}}" tabindex="{{fieldTabindex}}" ng-class="{\'angucomplete-input-not-empty\': notEmpty}" ng-model="searchStr" ng-disabled="disableInput" type="{{inputType}}" placeholder="{{placeholder}}" maxlength="{{maxlength}}" ng-focus="onFocusHandler()" class="{{inputClass}}" ng-focus="resetHideResults()" ng-blur="hideResults($event)" autocapitalize="off" autocorrect="off" autocomplete="off" ng-change="inputChangeHandler(searchStr)"/>' +
         '  <div id="{{id}}_dropdown" class="angucomplete-dropdown" ng-show="showDropdown">' +
         '    <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>' +
         '    <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>' +
@@ -351,7 +355,7 @@
         var row = null;
         var rowTop = null;
 
-        if (which === KEY_EN && scope.results) {
+        if ((which === KEY_EN || which === KEY_TAB) && scope.results) {
           if (scope.currentIndex >= 0 && scope.currentIndex < scope.results.length) {
             event.preventDefault();
             scope.selectResult(scope.results[scope.currentIndex]);
@@ -545,10 +549,6 @@
       }
 
       function searchTimerComplete(str) {
-        // Begin the search
-        if (!str || str.length < minlength) {
-          return;
-        }
         if (scope.localData) {
           scope.$apply(function() {
             var matches;
@@ -690,7 +690,10 @@
           scope.searchStr = null;
         }
         else {
-          scope.searchStr = result.title;
+
+         // scope.searchStr = result.title;
+
+         scope.searchStr = scope.matchCallback({match: result});
         }
         callOrAssign(result);
         clearResults();
@@ -811,7 +814,9 @@
         fieldTabindex: '@',
         inputName: '@',
         focusFirst: '@',
-        parseInput: '&'
+        parseInput: '&',
+        matchCallback: '&',
+        searchStr: '=searchStr'
       },
       templateUrl: function(element, attrs) {
         return attrs.templateUrl || TEMPLATE_URL;
