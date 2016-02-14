@@ -1,5 +1,5 @@
 /*
- * angucomplete-alt
+ * angucomplete-alt-dynamic
  * Autocomplete directive for AngularJS
  * This is a fork of Daryl Rowland's angucomplete with some extra features.
  * By Hidenari Nozaki
@@ -22,7 +22,7 @@
 }(window, function (angular) {
   'use strict';
 
-  angular.module('angucomplete-alt', []).directive('angucompleteAlt', ['$q', '$parse', '$http', '$sce', '$timeout', '$templateCache', '$interpolate', function ($q, $parse, $http, $sce, $timeout, $templateCache, $interpolate) {
+  angular.module('angucomplete-alt-dynamic', []).directive('angucompleteAltDynamic', ['$q', '$parse', '$http', '$sce', '$timeout', '$templateCache', '$interpolate', function ($q, $parse, $http, $sce, $timeout, $templateCache, $interpolate) {
     // keyboard events
     var KEY_DW  = 40;
     var KEY_RT  = 39;
@@ -41,7 +41,7 @@
     var REQUIRED_CLASS = 'autocomplete-required';
     var TEXT_SEARCHING = 'Searching...';
     var TEXT_NORESULTS = 'No results found';
-    var TEMPLATE_URL = '/angucomplete-alt/index.html';
+    var TEMPLATE_URL = '/angucomplete-alt-dynamic/index.html';
 
     // Set the default template for this directive
     $templateCache.put(TEMPLATE_URL,
@@ -117,7 +117,7 @@
         }
       });
 
-      scope.$on('angucomplete-alt:clearInput', function (event, elementId) {
+      scope.$on('angucomplete-alt-dynamic:clearInput', function (event, elementId) {
         if (!elementId || elementId === scope.id) {
           scope.searchStr = null;
           callOrAssign();
@@ -126,7 +126,7 @@
         }
       });
 
-      scope.$on('angucomplete-alt:changeInput', function (event, elementId, newval) {
+      scope.$on('angucomplete-alt-dynamic:changeInput', function (event, elementId, newval) {
         if (!!elementId && elementId === scope.id) {
           handleInputChange(newval);
         }
